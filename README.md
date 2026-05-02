@@ -117,3 +117,13 @@ This tool is provided as-is for research and development purposes only. Use at y
 ## Donate
 - [donate to Gezine](https://github.com/sponsors/Gezine)
 - [donate to PLK](DONATE.md)
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=itsplk%2Fps5-y2jb-autoloader&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=itsplk/ps5-y2jb-autoloader&type=date&theme=dark&legend=bottom-right" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=itsplk/ps5-y2jb-autoloader&type=date&legend=bottom-right" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=itsplk/ps5-y2jb-autoloader&type=date&legend=bottom-right" />
+ </picture>
+</a>
