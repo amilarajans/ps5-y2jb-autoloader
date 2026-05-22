@@ -288,10 +288,8 @@ function trigger() {
             window.autoloader_ui();
             window.uiLog("Autoloader " + autoloader_version + " by PLK", "success");
             window.updateProgress(0, "Running userland exploit...");
-            window.uiLog("Y2JB by Gezine", "success");
 
         }
-        await log(version_string);
         await log('Starting Exploit');
         
         await gc();
