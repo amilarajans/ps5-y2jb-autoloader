@@ -112,20 +112,6 @@ async function start_autoload() {
     }
 
     static async loadFromFile(filepath) {
-      if (!elf_loader_active) {
-        await start_elf_loader();
-        if (typeof window.increment_autoload_progress === 'function') {
-            window.increment_autoload_progress("Starting ELF Loader...");
-        }
-        await sleep(4000); // Give it time to start
-        if (!elf_loader_active) {
-          const msg = "[-] elf loader not active, cannot send elf";
-          log(msg);
-          send_notification(msg);
-          throw new Error(msg);
-        }
-      }
-
       if (!file_exists(filepath)) {
         const msg = "[-] File not found: " + filepath;
         log(msg);
@@ -311,23 +297,6 @@ async function start_autoload() {
         // replace "\n" with actual newlines
         notificationMsg = notificationMsg.replace(/\\n/g, '\n');
         send_notification(notificationMsg);
-      } else if (trimmedLine === 'elfldr.elf') {
-        const fullPath = trimmedLine.startsWith('/') ? trimmedLine : configDir + trimmedLine;
-        // using custom elfldr
-        if (!elf_loader_active) {
-          if (typeof window.increment_autoload_progress === 'function') {
-              window.increment_autoload_progress("Starting ELF Loader...");
-          }
-          send_notification("Starting ELF Loader from: " + fullPath);
-          await start_elf_loader(fullPath);
-          await sleep(4000); // Give it time to start
-          if (!elf_loader_active) {
-            const msg = "[-] elf loader not active, cannot send elf";
-            log(msg);
-            send_notification(msg);
-            throw new Error(msg);
-          }
-        }
       } else if (trimmedLine.endsWith('.elf') || trimmedLine.endsWith('.bin')) {
         const fullPath = trimmedLine.startsWith('/') ? trimmedLine : configDir + trimmedLine;
         if (file_exists(fullPath)) {

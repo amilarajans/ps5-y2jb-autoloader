@@ -69,8 +69,19 @@ this will allow you to have different autoload.txt files for each app
 By default, the autoloader uses a custom version of **elfldr** that only accepts connections from the PS5 itself (localhost). This improves security by preventing other devices on your network from sending payloads to your console.
 
 If you want to use a "normal" ELF Loader that allows sending payloads from any device:
-1. Place your `elfldr.elf` in the `ps5_autoloader` directory.
-2. Add `elfldr.elf` as the **first** line in your `autoload.txt`.
+1. Place your custom ELF Loader (e.g. `elfldr.elf`) in the `ps5_autoloader` directory.
+2. Add `elfldr.elf` to your `autoload.txt`.
+3. **Note**: If you are loading other payloads right after `elfldr.elf` in your `autoload.txt`, add a sleep command immediately after it (like `!4000` to sleep for 4 seconds) to give the new ELF Loader time to start up and listen before subsequent payloads are sent.
+
+Example `autoload.txt`:
+```text
+# Load custom ELF Loader
+elfldr.elf
+# Give it 4 seconds to start up (only needed if sending more payloads)
+!4000
+# Send other payloads
+etaHEN.elf
+```
 </Details>
 
 <Details>
