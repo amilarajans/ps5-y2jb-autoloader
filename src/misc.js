@@ -604,11 +604,15 @@ function start_progress_overlay(total_minutes) {
     }
 
     function update_display() {
-        const remaining = Math.max(1, total_minutes - elapsed);
         const percent = Math.min(99, Math.round((elapsed / total_minutes) * 100));
-        
         progressBar.style.width = percent + "%";
-        statusText.textContent = "Approximately ~" + remaining + " minutes remaining... (" + percent + "%)";
+        
+        if (elapsed >= total_minutes) {
+            statusText.textContent = "Still loading, please wait... (99%)";
+        } else {
+            const remaining = total_minutes - elapsed;
+            statusText.textContent = "Approximately ~" + remaining + " minutes remaining... (" + percent + "%)";
+        }
         
         randomize_position();
     }
