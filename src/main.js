@@ -1169,14 +1169,21 @@ function trigger() {
             window.updateProgress(20, "Running kernel exploit...");
         }
 
+        let exploit_success = false;
+
         if (compare_version(FW_VERSION, "10.01") <= 0) {
-            await start_lapse();
+            exploit_success = await start_lapse();
         }
         else if (compare_version(FW_VERSION, "12.70") <= 0) {
-            await start_p2jb();
+            exploit_success = await start_p2jb();
         }
         else {
             send_notification("[ERROR] Unsupported fw: " + FW_VERSION);
+            await kill_youtube(5000);
+            return;
+        }
+
+        if (!exploit_success) {
             await kill_youtube(5000);
             return;
         }

@@ -1706,19 +1706,19 @@ async function start_lapse() {
         if(typeof load_aioshellcode === "undefined") {
             await log("Update Y2JB to at least 1.4 version");
             send_notification("Update Y2JB to at least 1.4 version");
-            return;
+            return false;
         }
         
         if (compare_version(FW_VERSION, "10.01") > 0) {
             await log("Unsupported fw " + FW_VERSION);
             send_notification("Unsupported fw " + FW_VERSION);
-            return;
+            return false;
         }
         
         if(is_jailbroken()) {
             await log("Already Jailbroken");
             send_notification("Already Jailbroken");
-            return;
+            return false;
         }
         
         failcheck_path = "/" + get_nidpath() + "/common_temp/lapse.fail";
@@ -1729,7 +1729,7 @@ async function start_lapse() {
 
             await kill_youtube();
 
-            return;
+            return false;
         }
 
         await log(lapse_version);
@@ -1743,7 +1743,7 @@ async function start_lapse() {
         const setup_success = await setup();
         if (!setup_success) {
             await log("Setup failed");
-            return;
+            return false;
         }
         
         await log("Setup completed");
@@ -1756,7 +1756,7 @@ async function start_lapse() {
                 await cleanup();
                 await log("Exploit failed - Reboot and try again");
                 send_notification("Exploit failed - Reboot and try again");
-                return;
+                return false;
             }
             await log("Stage 1 completed");
             
@@ -1767,7 +1767,7 @@ async function start_lapse() {
                 await cleanup();
                 await log("Exploit failed - Reboot and try again");
                 send_notification("Exploit failed - Reboot and try again");
-                return;
+                return false;
             }
             await log("Stage 2 completed");
             
@@ -1798,7 +1798,7 @@ async function start_lapse() {
                 await cleanup();
                 await log("Exploit failed - Reboot and try again");
                 send_notification("Exploit failed - Reboot and try again");
-                return;
+                return false;
             }
             
             await log("Stage 3 completed!");
@@ -1820,7 +1820,7 @@ async function start_lapse() {
                 await cleanup();
                 await log("Exploit failed - Reboot and try again");
                 send_notification("Exploit failed - Reboot and try again");
-                return;
+                return false;
             }
             
             await log("Stage 4 completed!");
@@ -1833,16 +1833,19 @@ async function start_lapse() {
             await cleanup();
             
             await log("Lapse finished");
+            return true;
             
         } catch (e) {
             await log("Lapse error: " + e.message);
             await log(e.stack);
             
             await cleanup();
+            return false;
         }
         
     } catch (e) {
         await log("Lapse error: " + e.message);
         await log(e.stack);
+        return false;
     }
 }

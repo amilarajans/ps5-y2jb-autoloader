@@ -1574,21 +1574,21 @@ async function start_p2jb() {
                 await ulog("FATAL: Y2JB >= 1.4 required");
                 send_notification("p2jb requires Y2JB 1.4 or newer\n" +
                     "(update y2jb and retry)");
-                return;
+                return false;
             }
         }
 
         try {
             if (typeof is_jailbroken === "function" && is_jailbroken()) {
                 send_notification("p2jb: already jailbroken");
-                return;
+                return false;
             }
             failcheck_path = "/" + get_nidpath() + "/common_temp/p2jb.fail";
             if (file_exists(failcheck_path) ||
                 file_exists("/user/temp/common_temp/p2jb.fail")) {
                 send_notification("p2jb already ran this boot - reboot your\n" +
                     "PS5 before running p2jb again");
-                return;
+                return false;
             }
         } catch (_) { failcheck_path = null; }
 
@@ -1799,9 +1799,11 @@ async function start_p2jb() {
         await ulog("restored main thread to core " + S.orig_main_core);
 
         await ulog("=== p2jb complete ===");
+        return true;
 
     } catch (e) {
         try { await log("p2jb FATAL: " + e.message); } catch (_) { }
         try { send_notification("p2jb FAILED: " + e.message); } catch (_) { }
+        return false;
     }
 }
