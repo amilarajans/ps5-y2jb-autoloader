@@ -101,7 +101,7 @@ async function start_autoload() {
     return;
   }
 
-  const payload_name = "@@UNIFIED_AUTOLOADER_FILE@@";
+  const payload_name = "ps5-unified-autoloader.elf";
   const payload_path = find_file(payload_name);
 
   if (!payload_path) {

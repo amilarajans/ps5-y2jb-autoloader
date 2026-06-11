@@ -4,9 +4,9 @@
 [submodule "third_party/ps5-kexp"]
 	path = third_party/ps5-kexp
 	url = https://github.com/itsPLK/ps5-kexp.git
-[submodule "third_party/ps5-payload-manager"]
-	path = third_party/ps5-payload-manager
-	url = https://github.com/itsPLK/ps5-payload-manager.git
 [submodule "third_party/y2jb-updater"]
 	path = third_party/y2jb-updater
 	url = https://github.com/itsPLK/y2jb-updater.git
+[submodule "third_party/ps5-unified-autoloader"]
+	path = third_party/ps5-unified-autoloader
+	url = https://github.com/itsPLK/ps5-unified-autoloader.git

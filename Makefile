@@ -13,7 +13,6 @@ endif
 SRC_FILES := $(shell find src -type f)
 ELFLDR_FILE := $(shell basename $(shell ls src/elfldr-ps5-*.elf 2>/dev/null | head -n 1) 2>/dev/null)
 KEXP_FILE := $(shell basename $(shell ls src/kexp-*.bin 2>/dev/null | head -n 1) 2>/dev/null)
-UNIFIED_AUTOLOADER_FILE := $(shell basename $(shell ls src/ps5-unified-autoloader-*.elf 2>/dev/null | head -n 1) 2>/dev/null)
 
 all: y2jb_update.zip
 
@@ -23,7 +22,6 @@ y2jb_update.zip: $(SRC_FILES)
 	sed -i.bak "s/@@VERSION@@/$(RELEASE_VERSION)/g" build_dir/main.js && rm build_dir/main.js.bak
 	sed -i.bak "s/@@ELFLDR_FILE@@/$(ELFLDR_FILE)/g" build_dir/aioshellcode.js && rm build_dir/aioshellcode.js.bak
 	sed -i.bak "s/@@KEXP_FILE@@/$(KEXP_FILE)/g" build_dir/aioshellcode.js && rm build_dir/aioshellcode.js.bak
-	sed -i.bak "s/@@UNIFIED_AUTOLOADER_FILE@@/$(UNIFIED_AUTOLOADER_FILE)/g" build_dir/autoload.js && rm build_dir/autoload.js.bak
 	python3 third_party/y2jb-updater/create_update_package.py build_dir
 	rm -rf build_dir
 

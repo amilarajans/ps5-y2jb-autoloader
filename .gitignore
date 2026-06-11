@@ -2,7 +2,5 @@
 y2jb_update.zip
 src/elfldr-ps5-*.elf
 src/kexp-*.bin
-src/ps5_autoloader/pldmgr-*.elf
-src/ps5_autoloader/pldmgr_v*.elf
-src/ps5_autoloader/autoload.txt
+src/ps5-unified-autoloader.elf
 build_dir/
