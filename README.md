@@ -8,8 +8,8 @@
 
 <p align="center">
     <b>Other Autoloaders:</b><br>
-    <a href="https://github.com/itsPLK/ps5-bdjb-autoloader">PS5 BD-JB Autoloader</a> | 
-    <a href="https://github.com/itsPLK/ps5-lua-autoloader">PS5 Lua Autoloader</a>
+    <a href="https://github.com/itsPLK/ps5-bdjb-autoloader">BD-JB</a> | 
+    <a href="https://github.com/itsPLK/ps5-lua-autoloader">Lua</a>
 </p>
 
 <p align="center">
@@ -19,16 +19,32 @@
 
 ## How to Use
 
+There are two ways to use the autoloader:
+
+### 🟢 Option 1: Payload Manager
+
+If no `autoload.txt` config is found, the autoloader will automatically launch **[Payload Manager](https://github.com/itsPLK/ps5-payload-manager)** — a fully-featured PS5 payload manager with a web UI. This lets you configure and send payloads directly from your browser, without needing to manually set up config files or transfer ELF files ahead of time.
+
+Just run the autoloader — if there's nothing configured, Payload Manager starts automatically.
+
+> **Note:** Payload Manager also has its own built-in autoload feature, which lets you configure payloads to load automatically on startup — all managed through its web UI. This is separate from the `autoload.txt` mechanism described below.
+
+---
+
+### ⚙️ Option 2: Manual Config (`autoload.txt`)
+
+For a fixed, automated payload chain, you can configure payloads manually:
+
 - Create a directory named `ps5_autoloader`.
-- Inside this directory, place your `.elf`, `.bin`, and `.js` files, and an `autoload.txt` file.
+- Inside this directory, place your `.elf` / `.bin` files, and an `autoload.txt` file.
   - In `autoload.txt`, list the files you want to load, one filename per line.
   - Filenames are case-sensitive — ensure each name exactly matches the file.
   - You can add lines like `!1000` to make the loader wait 1000 ms before sending the next payload.
-  - Do NOT include kernel exploit or elfldr in `autoload.txt`; they are loaded automatically.
 - Put the `ps5_autoloader` directory in one of these locations (priority order - highest first):
   - Root of a USB drive
   - Internal drive: `/data/ps5_autoloader`
-  - The YT's splash_screen folder: `download0/cache/splash_screen/aHR0cHM6Ly93d3cueW91dHViZS5jb20vdHY=/ps5_autoloader`
+
+> **Note:** When an `autoload.txt` config is found, Payload Manager is **not** launched automatically. If you also want Payload Manager available, place `pldmgr.elf` in your `ps5_autoloader` directory and add it to `autoload.txt`.
 
 ## How to Update
 
@@ -86,22 +102,6 @@ elfldr.elf
 etaHEN.elf
 ```
 </Details>
-
-<Details>
-<Summary><i>etaHEN loading stability issues</i></Summary>
-
-Sometimes etaHEN will fail to load. It seems that etaHEN/kstuff often won't finish loading until the YouTube app is closed.
-
-**Recommended Solution:**
-Since version **v0.5**, the autoloader includes **Payload Manager**. Using it is the most reliable way to load etaHEN/kstuff, as it waits for the YouTube app to close before sending the payloads. To use it, make `pldmgr.elf` the **only** item in your `autoload.txt`.
-
-**Alternative Workarounds:**
-- Disable etaHEN toolbox automatic injecting.
-- Load etaHEN without kstuff and then load kstuff separately.
-- Minimize the YT app (by holding the PS button) after running lapse but before etaHEN loads.
-- Add a delay before loading etaHEN to give yourself more time to minimize.
-</Details>
-
 
 ## Credits
 
