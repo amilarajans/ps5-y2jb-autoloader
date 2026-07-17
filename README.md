@@ -131,15 +131,5 @@ All unique modifications and additions in this fork are licensed under **GPL-3.0
 This tool is provided as-is for research and development purposes only. Use at your own risk. The developers are not responsible for any damage, data loss, or consequences resulting from the use of this software.
 
 ## Donate
-- [donate to Gezine](https://github.com/sponsors/Gezine)
-- [donate to PLK](DONATE.md)
-
-## Star History
-
-<a href="https://www.star-history.com/?repos=itsplk%2Fps5-y2jb-autoloader&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=itsplk/ps5-y2jb-autoloader&type=date&theme=dark&legend=bottom-right" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=itsplk/ps5-y2jb-autoloader&type=date&legend=bottom-right" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=itsplk/ps5-y2jb-autoloader&type=date&legend=bottom-right" />
- </picture>
-</a>
+- [donate to PLK](DONATE.md) (creator of this autoloader)
+- [donate to Gezine](https://github.com/sponsors/Gezine) (creator of the original [Y2JB](https://github.com/Gezine/Y2JB))
