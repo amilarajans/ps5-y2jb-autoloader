@@ -1192,8 +1192,9 @@
   width: 62%;
   flex: 1 1 auto;
   min-height: 0;
-  max-height: 58%;
-  margin-top: 10px;
+  max-height: 52%;
+  margin-top: 8px;
+  margin-bottom: 0;
   background: linear-gradient(180deg, rgba(10, 6, 10, 0.92) 0%, rgba(4, 2, 6, 0.96) 100%);
   border: 1px solid rgba(255, 60, 60, 0.4);
   box-shadow:
@@ -1327,7 +1328,8 @@
 
 .cp-progress-wrap {
   width: 60%;
-  margin-top: 28px;
+  margin-top: auto; /* pin pipeline to bottom of layout */
+  margin-bottom: 8px;
   flex: 0 0 auto;
 }
 

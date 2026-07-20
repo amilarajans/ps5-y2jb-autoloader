@@ -40,7 +40,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
-      port: 5173,
+      // Avoid clashing with pldmgr mock UI (often 5173/5174)
+      port: 5180,
+      strictPort: true,
       open: true,
     },
     build: {
