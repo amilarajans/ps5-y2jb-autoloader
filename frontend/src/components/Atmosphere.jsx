@@ -142,35 +142,38 @@ export default function Atmosphere() {
 
       {/* ── Ported side widgets from Y2JB Autoloader.dc.html ── */}
 
-      {/* Cyberdeck / RAM — scanner-style HUD widget */}
-      <div className="cp-widget cp-widget--deck" aria-hidden="true">
-        <div className="cp-widget__title cp-widget__title--cyan">
-          CYBERDECK <span>V.6.62</span>
+      {/* Kernel Link — replaces cyberdeck (privilege / R/W status) */}
+      <div className="cp-widget cp-widget--kernel" aria-hidden="true">
+        <div className="cp-widget__title cp-widget__title--yellow">
+          KERNEL LINK <span>RING-0</span>
         </div>
-        <div className="cp-deck-ram">
-          <span className="cp-deck-ram__label">RAM</span>
-          <div className="cp-deck-ram__slots">
-            <span className="cp-deck-ram__slot cp-deck-ram__slot--on" />
-            <span className="cp-deck-ram__slot cp-deck-ram__slot--on" />
-            <span className="cp-deck-ram__slot cp-deck-ram__slot--on" />
-            <span className="cp-deck-ram__slot cp-deck-ram__slot--on" />
+        <div className="cp-kernel-ring">
+          <span className="cp-kernel-ring__label">PRIV</span>
+          <div className="cp-kernel-ring__track">
+            <span className="cp-kernel-ring__seg is-on" />
+            <span className="cp-kernel-ring__seg is-on" />
+            <span className="cp-kernel-ring__seg is-on" />
+            <span className="cp-kernel-ring__seg is-hot" />
           </div>
-          <span className="cp-deck-ram__count">4 / 4</span>
+          <span className="cp-kernel-ring__val">EL0 → EL1</span>
         </div>
         <div className="cp-deck-row">
-          <span>OPTICS</span>
-          <span className="cp-deck-row__ok">READY</span>
+          <span>KASLR</span>
+          <span className="cp-deck-row__ok">DEFEATED</span>
         </div>
         <div className="cp-deck-row">
-          <span>SHORT CIRCUIT</span>
-          <span className="cp-deck-row__ok">READY</span>
+          <span>R / W</span>
+          <span className="cp-deck-row__ok">LIVE</span>
         </div>
         <div className="cp-deck-row cp-deck-row--busy">
-          <span>BREACH PROTOCOL</span>
-          <span className="cp-deck-row__wait">RECOMP…</span>
+          <span>CODE SIGN</span>
+          <span className="cp-deck-row__wait">BYPASS…</span>
+        </div>
+        <div className="cp-mini-bar">
+          <div className="cp-mini-bar__fill cp-mini-bar__fill--hot" style={{ width: '82%' }} />
         </div>
         <div className="cp-widget__foot">
-          BUFFER <span className="cp-widget__val--cyan">SECURE</span>
+          AUTH <span className="cp-widget__val--yellow">OPEN</span>
         </div>
       </div>
 
