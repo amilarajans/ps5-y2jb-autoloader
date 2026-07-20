@@ -23,7 +23,7 @@ There are two ways to use the autoloader:
 
 ### 🟢 Option 1: Payload Manager
 
-If no `autoload.txt` config is found, the autoloader will automatically launch **[Payload Manager](https://github.com/itsPLK/ps5-payload-manager)** — a fully-featured PS5 payload manager with a web UI. This lets you configure and send payloads directly from your browser, without needing to manually set up config files or transfer ELF files ahead of time.
+If no `autoload.txt` config is found, the autoloader will automatically launch **[Payload Manager](https://github.com/amilarajans/ps5-payload-manager)** — a fully-featured PS5 payload manager with a web UI (Cyberpunk 2077 theme support). This lets you configure and send payloads directly from your browser, without needing to manually set up config files or transfer ELF files ahead of time.
 
 Just run the autoloader — if there's nothing configured, Payload Manager starts automatically.
 

@@ -14,9 +14,28 @@ SRC_FILES := $(shell find src -type f)
 ELFLDR_FILE := $(shell basename $(shell ls src/elfldr-ps5-*.elf 2>/dev/null | head -n 1) 2>/dev/null)
 KEXP_FILE := $(shell basename $(shell ls src/kexp-*.bin 2>/dev/null | head -n 1) 2>/dev/null)
 
-all: y2jb_update.zip
+# Prefer bun, fall back to npm
+BUN ?= $(shell command -v bun 2>/dev/null)
+NPM ?= $(shell command -v npm 2>/dev/null)
 
-y2jb_update.zip: $(SRC_FILES)
+all: ui y2jb_update.zip
+
+# Cyberpunk React UI → src/ui.js
+ui: src/ui.js
+
+src/ui.js: $(shell find frontend/src -type f 2>/dev/null) frontend/package.json frontend/vite.config.js
+	@echo "=== Building Cyberpunk autoloader UI ==="
+	@if [ -n "$(BUN)" ]; then \
+		cd frontend && bun install && bun run build; \
+	elif [ -n "$(NPM)" ]; then \
+		cd frontend && npm install && npm run build; \
+	else \
+		echo "Error: need bun or npm to build frontend" >&2; exit 1; \
+	fi
+	cp frontend/dist/ui.js src/ui.js
+	@echo "Installed src/ui.js"
+
+y2jb_update.zip: $(SRC_FILES) src/ui.js
 	rm -rf build_dir
 	cp -r src build_dir
 	sed -i.bak "s/@@VERSION@@/$(RELEASE_VERSION)/g" build_dir/main.js && rm build_dir/main.js.bak
@@ -26,8 +45,9 @@ y2jb_update.zip: $(SRC_FILES)
 	rm -rf build_dir
 
 clean:
-	rm -rf build_dir y2jb_update.zip
+	rm -rf build_dir y2jb_update.zip frontend/dist frontend/dist-preview
+	rm -f src/ui.js
 
-.PHONY: all clean print-version
+.PHONY: all clean print-version ui
 print-version:
 	@echo $(RELEASE_VERSION)

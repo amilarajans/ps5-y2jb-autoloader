@@ -152,157 +152,47 @@ function trigger() {
         }
     };
 
-    window.autoloader_ui = function() {
-        if (document.getElementById("autoloader_ui")) {
-            const existing_ui = document.getElementById("autoloader_ui");
-            existing_ui.parentNode.removeChild(existing_ui);
-        }
+    // Cyberpunk-themed React UI (frontend/ → src/ui.js). Falls back to a
+    // minimal DOM UI if ui.js is missing so exploit flow still works.
+    try {
+        await load_localscript('ui.js');
+    } catch (e) {
+        await log('ui.js not loaded, using fallback UI');
+    }
 
-        const baseWidth = 1920;
-        const baseHeight = 1080;
-        const scale = window.innerWidth / baseWidth;
-
-        const autoloader_ui = document.createElement("div");
-        autoloader_ui.id = "autoloader_ui";
-        autoloader_ui.style.position = "fixed";
-        autoloader_ui.style.top = "0px";
-        autoloader_ui.style.left = "0px";
-        autoloader_ui.style.width = baseWidth + "px";
-        autoloader_ui.style.height = baseHeight + "px";
-        autoloader_ui.style.transform = "scale(" + scale + ")";
-        autoloader_ui.style.transformOrigin = "top left";
-        autoloader_ui.style.zIndex = "9999";
-        autoloader_ui.style.backgroundColor = "#272727";
-        autoloader_ui.style.border = "1px solid black";
-        autoloader_ui.style.padding = "5px";
-        autoloader_ui.style.fontFamily = "Arial, sans-serif";
-        autoloader_ui.style.fontSize = "8px";
-
-        const title = document.createElement("div");
-        title.textContent = "Y2JB Autoloader";
-        title.style.fontFamily = "monospace";
-        title.style.textAlign = "center";
-        title.style.fontWeight = "bold";
-        title.style.color = "#ccc";
-        title.style.padding = "10px";
-        title.style.borderRadius = "8px";
-        title.style.marginBottom = "5px";
-        title.style.fontSize = "42px";
-        title.style.marginTop = "60px";
-        autoloader_ui.appendChild(title);
-
-        const logWrapper = document.createElement("div");
-        logWrapper.style.width = "62%";
-        logWrapper.style.height = "62%";        
-        logWrapper.style.position = "relative";
-        logWrapper.style.margin = "20px auto 0 auto";
-        logWrapper.style.padding = "0px";
-        logWrapper.style.color = "#ccc";
-        logWrapper.style.backgroundColor = "#000";
-        logWrapper.style.fontFamily = "monospace";
-        logWrapper.style.fontSize = "28px";
-        logWrapper.style.overflow = "hidden";
-        logWrapper.style.border = "2px solid red";
-        logWrapper.style.borderRadius = "8px";
-        logWrapper.style.overflowY = "scroll";
-        logWrapper.id = "logWrapper";
-        autoloader_ui.appendChild(logWrapper);
-
-        const logContainer = document.createElement("div");
-        logContainer.id = "logContainer";
-        logContainer.style.position = "absolute";
-        logContainer.style.bottom = "0";
-        logContainer.style.padding = "10px";
-        logWrapper.appendChild(logContainer);
-
-        const progressBarContainer = document.createElement("div");
-        progressBarContainer.style.width = "60%";
-        progressBarContainer.style.height = "100px";
-        progressBarContainer.style.backgroundColor = "#202020";
-        progressBarContainer.style.border = "2px solid red";
-        progressBarContainer.style.borderRadius = "16px";
-        progressBarContainer.style.margin = "0 auto";
-        progressBarContainer.style.overflow = "hidden";
-        progressBarContainer.style.position = "relative";
-        progressBarContainer.style.marginTop = "30px";
-        autoloader_ui.appendChild(progressBarContainer);
-
-        const progressLabel = document.createElement("div");
-        progressLabel.id = "progressLabel";
-        progressLabel.textContent = "Loading...";
-        progressLabel.style.position = "absolute";
-        progressLabel.style.top = "50%";
-        progressLabel.style.left = "50%";
-        progressLabel.style.transform = "translate(-50%, -50%)";
-        progressLabel.style.color = "#fff";
-        progressLabel.style.fontSize = "42px";
-        progressLabel.style.fontWeight = "bold";
-        progressLabel.style.zIndex = "1";
-        progressBarContainer.appendChild(progressLabel);
-
-        const progressBar = document.createElement("div");
-        progressBar.id = "progressBar";
-        progressBar.style.width = "100%";
-        progressBar.style.height = "100%";
-        progressBar.style.backgroundColor = "#aa0000";
-        progressBar.style.transformOrigin = "left";
-        progressBar.style.transform = "scaleX(0)";
-        progressBar.style.transition = "transform 0.5s ease-in-out";
-        progressBarContainer.appendChild(progressBar);
-
-        document.body.appendChild(autoloader_ui);
-    };
-
-    window.updateProgress = function(percent, message="Loading...") {
-        const progressBar = document.getElementById("progressBar");
-        if (progressBar) {
-            progressBar.style.transform = 'scaleX(' + percent/100 + ')';
-        }
-        const progressLabel = document.getElementById("progressLabel");
-        if (progressLabel) {
-            progressLabel.textContent = message;
-        }
-        window.uiLog(message, "warning");
-    };
-
-    window.uiLog = function(message, type="info") {
-        if (typeof message === 'string' && (message.includes("[ERROR]") || message.includes("[-]"))) {
-            if (typeof window.hideUI === 'function') window.hideUI();
-        }
-        const logContainer = document.getElementById("logContainer");
-        if (logContainer) {
-            const logEntry = document.createElement("div");
-            if (type === "error") {
-                logEntry.style.color = "red";
-            } else if (type === "success") {
-                logEntry.style.color = "lightgreen";
-            } else if (type === "warning") {
-                logEntry.style.color = "yellow";
-            } else {
-                logEntry.style.color = "#ccc";
-            }
-            logEntry.textContent = message;
-            logContainer.appendChild(logEntry);
-            if (logContainer.childElementCount > 20) {
-                logContainer.removeChild(logContainer.firstChild);
-            }
-            const logWrapper = document.getElementById("logWrapper");
-            if (logWrapper) {
-                logWrapper.scrollTop = logWrapper.scrollHeight;
-            }
-        }
-    };
-
-    window.hideUI = function() {
-        if (document.getElementById("autoloader_ui")) {
-            const existing_ui = document.getElementById("autoloader_ui");
-            existing_ui.parentNode.removeChild(existing_ui);
-        }
-    };
+    if (typeof window.autoloader_ui !== 'function') {
+        // Minimal fallback if React bundle is absent
+        window.autoloader_ui = function() {
+            if (document.getElementById("autoloader_ui")) return;
+            const el = document.createElement("div");
+            el.id = "autoloader_ui";
+            el.style.cssText = "position:fixed;inset:0;z-index:9999;background:#050508;color:#fcee0a;font-family:monospace;padding:40px;font-size:28px;";
+            el.innerHTML = '<div id="logContainer"></div><div id="progressLabel" style="margin-top:20px">Loading...</div>';
+            document.body.appendChild(el);
+        };
+        window.uiLog = function(message, type) {
+            const c = document.getElementById("logContainer");
+            if (!c) return;
+            const d = document.createElement("div");
+            d.textContent = message;
+            d.style.color = type === "error" ? "#ff2a6d" : type === "success" ? "#00f0ff" : type === "warning" ? "#fcee0a" : "#ccc";
+            c.appendChild(d);
+        };
+        window.updateProgress = function(percent, message) {
+            const p = document.getElementById("progressLabel");
+            if (p) p.textContent = message || ("Progress " + percent + "%");
+            if (typeof window.uiLog === "function") window.uiLog(message || "", "warning");
+        };
+        window.hideUI = function() {
+            const el = document.getElementById("autoloader_ui");
+            if (el && el.parentNode) el.parentNode.removeChild(el);
+        };
+    }
 
     try {
+        window.__Y2JB_VERSION__ = autoloader_version;
         if (typeof window.autoloader_ui === 'function') {
-            window.autoloader_ui();
+            window.autoloader_ui(autoloader_version);
             window.uiLog("Y2JB Autoloader " + autoloader_version + " by PLK", "success");
             window.updateProgress(0, "Running userland exploit...");
 
