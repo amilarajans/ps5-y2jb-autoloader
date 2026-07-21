@@ -6,7 +6,7 @@ on:
       pldmgr_ref:
         description: "payload-manager git ref (branch/tag/SHA)"
         required: false
-        default: "feature/cyberpunk-2077-theme"
+        default: "main"
       pldmgr_repo:
         description: "payload-manager git URL"
         required: false
@@ -43,7 +43,7 @@ jobs:
       - name: Build package (themed pldmgr + y2jb_update.zip)
         id: build_package
         env:
-          PLDMGR_REF: ${{ inputs.pldmgr_ref || 'feature/cyberpunk-2077-theme' }}
+          PLDMGR_REF: ${{ inputs.pldmgr_ref || 'main' }}
           PLDMGR_REPO: ${{ inputs.pldmgr_repo || 'https://github.com/amilarajans/ps5-payload-manager.git' }}
         run: |
           chmod +x ./scripts/ci_build.sh

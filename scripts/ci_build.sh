@@ -15,7 +15,7 @@ cd "$(dirname "$0")/.."
 
 BUILD_TYPE="dev"
 PLDMGR_REPO="${PLDMGR_REPO:-https://github.com/amilarajans/ps5-payload-manager.git}"
-PLDMGR_REF="${PLDMGR_REF:-feature/cyberpunk-2077-theme}"
+PLDMGR_REF="${PLDMGR_REF:-main}"
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
