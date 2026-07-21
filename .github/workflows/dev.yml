@@ -2,6 +2,15 @@ name: Dev Build and Release
 
 on:
   workflow_dispatch:
+    inputs:
+      pldmgr_ref:
+        description: "payload-manager git ref (branch/tag/SHA)"
+        required: false
+        default: "feature/cyberpunk-2077-theme"
+      pldmgr_repo:
+        description: "payload-manager git URL"
+        required: false
+        default: "https://github.com/amilarajans/ps5-payload-manager.git"
 
 jobs:
   build-and-release:
@@ -19,19 +28,37 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
-      - name: Build Package
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Set up Node (pldmgr frontend fallback)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build package (themed pldmgr + y2jb_update.zip)
         id: build_package
-        run: ./build.sh --dev --download-deps
+        env:
+          PLDMGR_REF: ${{ inputs.pldmgr_ref || 'feature/cyberpunk-2077-theme' }}
+          PLDMGR_REPO: ${{ inputs.pldmgr_repo || 'https://github.com/amilarajans/ps5-payload-manager.git' }}
+        run: |
+          chmod +x ./scripts/ci_build.sh
+          ./scripts/ci_build.sh --dev \
+            --pldmgr-ref "${PLDMGR_REF}" \
+            --pldmgr-repo "${PLDMGR_REPO}"
 
       - name: Get Version
         id: get_version
         run: |
           VERSION=$(make print-version BUILD_TYPE=dev)
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          LAST_STABLE_TAG=$(git tag --sort=-creatordate | grep -v "\-dev\-" | grep -v "^${VERSION}$" | head -n 1)
-          echo "last_stable_tag=${LAST_STABLE_TAG}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          LAST_STABLE_TAG=$(git tag --sort=-creatordate | grep -v "\-dev\-" | grep -v "^${VERSION}$" | head -n 1 || true)
+          echo "last_stable_tag=${LAST_STABLE_TAG}" >> "$GITHUB_OUTPUT"
+          echo "repo=${GITHUB_REPOSITORY}" >> "$GITHUB_OUTPUT"
 
       - name: Create Dev Release
         uses: softprops/action-gh-release@v2
@@ -41,18 +68,25 @@ jobs:
           name: ${{ steps.get_version.outputs.version }}
           prerelease: true
           body: |
-            - ### Changelog:
+            ### Dev build (fork)
 
-            **Full Changelog (since last stable release)**: https://github.com/itsPLK/ps5_y2jb_autoloader/compare/${{ steps.get_version.outputs.last_stable_tag }}...${{ steps.get_version.outputs.version }}
+            **Repo:** `${{ github.repository }}`
+            **Commit:** `${{ github.sha }}`
+
+            **Full Changelog** (if prior tag exists): https://github.com/${{ github.repository }}/compare/${{ steps.get_version.outputs.last_stable_tag }}...${{ steps.get_version.outputs.version }}
 
             ---
             <details>
-            <summary>Bundled Binaries</summary>
+            <summary>Bundled binaries</summary>
 
-            This build integrates the following external dependency versions:
-            - [itsPLK/ps5-elfldr](https://github.com/itsPLK/ps5-elfldr): [${{ steps.build_package.outputs.elfldr_ver }}](https://github.com/itsPLK/ps5-elfldr/releases/tag/${{ steps.build_package.outputs.elfldr_ver }})
-            - [itsPLK/ps5-kexp](https://github.com/itsPLK/ps5-kexp): [${{ steps.build_package.outputs.kexp_ver }}](https://github.com/itsPLK/ps5-kexp/releases/tag/${{ steps.build_package.outputs.kexp_ver }})
-            - [itsPLK/ps5-unified-autoloader](https://github.com/itsPLK/ps5-unified-autoloader): [${{ steps.build_package.outputs.unified_autoloader_ver }}](https://github.com/itsPLK/ps5-unified-autoloader/releases/tag/${{ steps.build_package.outputs.unified_autoloader_ver }})
+            | Component | Version / ref |
+            |-----------|----------------|
+            | [ps5-elfldr](https://github.com/itsPLK/ps5-elfldr) | `${{ steps.build_package.outputs.elfldr_ver }}` |
+            | [ps5-kexp](https://github.com/itsPLK/ps5-kexp) | `${{ steps.build_package.outputs.kexp_ver }}` |
+            | [ps5-unified-autoloader](https://github.com/itsPLK/ps5-unified-autoloader) (built in CI) | `${{ steps.build_package.outputs.unified_autoloader_ver }}` |
+            | [ps5-payload-manager](https://github.com/amilarajans/ps5-payload-manager) (**themed**) | `${{ steps.build_package.outputs.pldmgr_ref }}` @ `${{ steps.build_package.outputs.pldmgr_sha }}` (`${{ steps.build_package.outputs.pldmgr_ver }}`) |
+
+            Unified autoloader is **built from the monorepo submodule** with this fork's payload-manager checked out and compiled (not the stock itsPLK release ELF).
 
             </details>
-          files: 'y2jb_update.zip'
+          files: y2jb_update.zip
