@@ -1,36 +1,47 @@
-# Y2JB Autoloader UI — Cyberpunk 2077 theme
+# Y2JB Autoloader Frontend (splash UI)
 
-React + Bun + Vite UI for the PS5 YouTube (Y2JB) autoloader splash.
+Cyberpunk combat-HUD splash for the **PS5 YouTube (Y2JB) autoloader**.
 
-Preserves the legacy bridge used by exploit scripts:
+Built as a **single self-contained** `splash.html` (CSS, JS, fonts inlined) that
+ships in the update package as `src/splash.html`.
 
-| API | Purpose |
-|-----|---------|
-| `window.autoloader_ui(version?)` | Mount / show the overlay |
-| `window.uiLog(message, type?)` | Append a log line (`info` / `success` / `warning` / `error`) |
-| `window.updateProgress(percent, message?)` | Update the progress bar + log |
-| `window.hideUI()` | Hide / tear down the overlay |
+Styled to match **ps5-payload-manager** (Night City HUD: code rain, hazard stripe,
+HudBar, glass-card BR cut + yellow corner ticks, log console, pipeline bar).
+
+This package is **UI only**. No exploit code lives here. The real chain drives the
+screen through four globals.
+
+## Exploit contract
+
+```js
+window.autoloader_ui(version?)          // show UI, reset state
+window.updateProgress(percent, message) // progress bar + log line
+window.uiLog(message, type?)            // append log (info/success/warning/error)
+window.hideUI()                         // hide (also auto on [ERROR] / [-])
+```
+
+`src/main.js` calls these after the YouTube app loads `splash.html`.
 
 ## Commands
 
-```bash
+```sh
 cd frontend
 bun install
-bun run dev      # browser preview with mock autoload sequence
-bun run build    # production IIFE → dist/ui.js (for PS5 package)
+bun run dev     # http://localhost:3000 — live demo sequence
+bun run build   # → dist/splash.html (single self-contained file)
 ```
 
-From the repo root, `make ui` builds and copies `dist/ui.js` → `src/ui.js`.
+From the repo root:
 
-## Design notes
+```sh
+make splash     # build + copy → src/splash.html
+make all        # splash + y2jb_update.zip
+```
 
-- Fixed **1920×1080** design space, scaled to the viewport (same as the old UI).
-- Night City palette: CDPR yellow `#fcee0a`, cyan `#00f0ff`, magenta `#ff2a6d`.
-- Scanlines, grid, corner brackets, glitch title, neon progress pipeline.
-- Build target: **ES2015 / Safari 12** for Cobalt / YouTube app compatibility.
-- CSS is injected at runtime (single `ui.js` file, no extra assets).
+## YouTube / package integration
 
-## Integration
+1. `make splash` (or `bun run build` then copy `dist/splash.html` → `src/splash.html`)
+2. Package via `make all` / `y2jb_update.zip`
+3. On console, YouTube loads `splash.html`; exploit scripts call the bridge APIs
 
-`src/main.js` loads `ui.js` via `load_localscript` before calling `autoloader_ui()`.
-The Makefile runs the frontend build as part of `make all`.
+`dist/splash.html` inlines CSS, JS, and fonts — one file drop-in, no extra assets.

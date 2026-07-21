@@ -1,23 +1,20 @@
 {
-  "name": "y2jb-autoloader-ui",
+  "name": "y2jb-autoloader-frontend",
+  "version": "0.1.0",
   "private": true,
-  "version": "1.0.0",
   "type": "module",
+  "description": "Cyberpunk Y2JB splash UI (YouTube entry) for ps5-y2jb-autoloader",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "bun run dev.ts",
+    "build": "bun run scripts/build.ts"
   },
   "dependencies": {
-    "@fontsource/orbitron": "^5.3.0",
-    "@fontsource/oxanium": "^5.3.0",
-    "@fontsource/rajdhani": "^5.3.0",
-    "@fontsource/share-tech-mono": "^5.3.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.5.2",
-    "vite": "^6.3.5"
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/bun": "latest"
   }
 }

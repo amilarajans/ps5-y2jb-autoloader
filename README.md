@@ -71,6 +71,18 @@ You can also restore [Y2JB](https://github.com/Gezine/Y2JB) (remote loader) syst
 - or install separate YT app from different region, and use FTP to place `download0.dat` from releases page in `/user/download/PPSA0165*`
 
 
+## Frontend (splash UI)
+
+The YouTube entry screen lives in **`frontend/`** (formerly a separate `y2jb-splash-ui` tree).
+
+```sh
+cd frontend && bun install && bun run dev   # browser demo
+make splash                                  # build → src/splash.html
+make all                                     # splash + y2jb_update.zip
+```
+
+See [`frontend/README.md`](frontend/README.md) for the exploit bridge API and design notes.
+
 ## Additional Info
 
 <Details>

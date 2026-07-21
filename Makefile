@@ -18,24 +18,25 @@ KEXP_FILE := $(shell basename $(shell ls src/kexp-*.bin 2>/dev/null | head -n 1)
 BUN ?= $(shell command -v bun 2>/dev/null)
 NPM ?= $(shell command -v npm 2>/dev/null)
 
-all: ui y2jb_update.zip
+all: splash y2jb_update.zip
 
-# Cyberpunk React UI → src/ui.js
-ui: src/ui.js
+# Cyberpunk splash UI → src/splash.html (single-file YouTube entry page)
+splash: src/splash.html
 
-src/ui.js: $(shell find frontend/src -type f 2>/dev/null) frontend/package.json frontend/vite.config.js
-	@echo "=== Building Cyberpunk autoloader UI ==="
+src/splash.html: $(shell find frontend/src -type f 2>/dev/null) frontend/package.json frontend/splash.html frontend/scripts/build.ts
+	@echo "=== Building Y2JB splash UI (frontend → splash.html) ==="
 	@if [ -n "$(BUN)" ]; then \
 		cd frontend && bun install && bun run build; \
-	elif [ -n "$(NPM)" ]; then \
-		cd frontend && npm install && npm run build; \
 	else \
-		echo "Error: need bun or npm to build frontend" >&2; exit 1; \
+		echo "Error: bun is required to build the splash frontend" >&2; exit 1; \
 	fi
-	cp frontend/dist/ui.js src/ui.js
-	@echo "Installed src/ui.js"
+	cp frontend/dist/splash.html src/splash.html
+	@echo "Installed src/splash.html"
 
-y2jb_update.zip: $(SRC_FILES) src/ui.js
+# Back-compat alias used by older docs / habits
+ui: splash
+
+y2jb_update.zip: $(SRC_FILES) src/splash.html
 	rm -rf build_dir
 	cp -r src build_dir
 	sed -i.bak "s/@@VERSION@@/$(RELEASE_VERSION)/g" build_dir/main.js && rm build_dir/main.js.bak
@@ -45,9 +46,10 @@ y2jb_update.zip: $(SRC_FILES) src/ui.js
 	rm -rf build_dir
 
 clean:
-	rm -rf build_dir y2jb_update.zip frontend/dist frontend/dist-preview
-	rm -f src/ui.js
+	rm -rf build_dir y2jb_update.zip frontend/dist
+	# Keep a committed splash.html; only remove if rebuilding from scratch is desired:
+	# rm -f src/splash.html
 
-.PHONY: all clean print-version ui
+.PHONY: all clean print-version splash ui
 print-version:
 	@echo $(RELEASE_VERSION)

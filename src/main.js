@@ -152,16 +152,18 @@ function trigger() {
         }
     };
 
-    // Cyberpunk-themed React UI (frontend/ → src/ui.js). Falls back to a
-    // minimal DOM UI if ui.js is missing so exploit flow still works.
-    try {
-        await load_localscript('ui.js');
-    } catch (e) {
-        await log('ui.js not loaded, using fallback UI');
+    // Prefer the combat HUD already bootstrapped by splash.html (frontend/).
+    // Optional legacy fallback: load ui.js only if the splash bridge is missing.
+    if (typeof window.autoloader_ui !== 'function') {
+        try {
+            await load_localscript('ui.js');
+        } catch (e) {
+            await log('ui.js not loaded, using fallback UI');
+        }
     }
 
     if (typeof window.autoloader_ui !== 'function') {
-        // Minimal fallback if React bundle is absent
+        // Minimal fallback if splash.html / ui.js bridge is absent
         window.autoloader_ui = function() {
             if (document.getElementById("autoloader_ui")) return;
             const el = document.createElement("div");

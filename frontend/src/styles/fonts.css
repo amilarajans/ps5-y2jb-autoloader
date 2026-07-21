@@ -1,36 +1,4 @@
-/* Display + UI faces (bundled offline for PS5) */
-
-@font-face {
-  font-family: 'Oxanium';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('../assets/fonts/oxanium-latin-700-normal.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Oxanium';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url('../assets/fonts/oxanium-latin-800-normal.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Orbitron';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('../assets/fonts/orbitron-latin-700-normal.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Orbitron';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url('../assets/fonts/orbitron-latin-800-normal.woff2') format('woff2');
-}
+/* HUD typefaces — matched to package / CP2077 combat chrome */
 
 @font-face {
   font-family: 'Share Tech Mono';
@@ -54,4 +22,36 @@
   font-weight: 700;
   font-display: swap;
   src: url('../assets/fonts/rajdhani-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/orbitron-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../assets/fonts/orbitron-latin-800-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Oxanium';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/oxanium-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Oxanium';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../assets/fonts/oxanium-latin-800-normal.woff2') format('woff2');
 }

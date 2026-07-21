@@ -1,23 +1,18 @@
 #!/usr/bin/env bash
-# Build splash + ui + y2jb_update.zip on WSL (Ubuntu)
+# Build splash + y2jb_update.zip on WSL (Ubuntu)
 set -euo pipefail
 
 ROOT="/mnt/c/Development/git/ps5-y2jb-autoloader"
-SPLASH="/mnt/c/Development/git/y2jb-splash-ui"
 cd "$ROOT"
 
-echo "=== Build splash.html ==="
+echo "=== Build splash.html (frontend/) ==="
 if command -v bun >/dev/null 2>&1; then
-  (cd "$SPLASH" && bun run build)
+  (cd frontend && bun install && bun run build)
 else
   echo "ERROR: bun required for splash build" >&2
   exit 1
 fi
-cp -f "$SPLASH/dist/splash.html" src/splash.html
-
-echo "=== Build autoloader frontend ui.js ==="
-(cd frontend && bun install && bun run build)
-cp -f frontend/dist/ui.js src/ui.js
+cp -f frontend/dist/splash.html src/splash.html
 
 # Ensure deps present (download if missing)
 if ! ls src/elfldr-ps5-*.elf >/dev/null 2>&1 || ! ls src/kexp-*.bin >/dev/null 2>&1; then

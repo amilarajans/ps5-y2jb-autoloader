@@ -4,7 +4,7 @@
 # - Downloads stock elfldr + kexp releases (itsPLK)
 # - Checks out themed payload-manager (amilarajans) and builds it
 # - Builds ps5-unified-autoloader embedding that pldmgr
-# - Builds splash UI (frontend) + y2jb_update.zip
+# - Builds splash UI (frontend/ → splash.html) + y2jb_update.zip
 #
 # Usage (from repo root):
 #   ./scripts/ci_build.sh --dev
@@ -53,9 +53,9 @@ need_cmd make
 need_cmd docker
 need_cmd git
 
-# Prefer bun for frontend builds
-if ! command -v bun >/dev/null 2>&1 && ! command -v npm >/dev/null 2>&1; then
-  echo "Error: need bun or npm for frontend builds" >&2
+# Bun required for splash frontend (single-file HTML build)
+if ! command -v bun >/dev/null 2>&1; then
+  echo "Error: bun is required to build frontend/splash.html" >&2
   exit 1
 fi
 
@@ -153,9 +153,9 @@ AUTOLOADER_VER=$(git -C "${UNIFIED}" describe --tags --always 2>/dev/null || ech
 echo "  unified-autoloader: ${AUTOLOADER_VER} (embeds pldmgr ${PLDMGR_DESCRIBE})"
 
 # -----------------------------------------------------------------------
-# 4) Package y2jb_update.zip (builds frontend ui.js via Makefile)
+# 4) Package y2jb_update.zip (builds frontend splash.html via Makefile)
 # -----------------------------------------------------------------------
-echo "=== [4/4] Build y2jb_update.zip ==="
+echo "=== [4/4] Build splash + y2jb_update.zip ==="
 make all BUILD_TYPE="${BUILD_TYPE}"
 
 # Export versions for GitHub Actions release notes

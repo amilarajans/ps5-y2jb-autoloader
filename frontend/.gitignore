@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+# Design reference plates (not imported by the UI)
+src/assets/images/ref-*.png
+src/assets/images/cp2077-goin-to-the-top.jpg
+src/assets/images/arasaka-logo.png
+src/assets/images/arasaka-logo.svg

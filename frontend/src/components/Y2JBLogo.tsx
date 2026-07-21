@@ -1,15 +1,13 @@
 /**
- * Y2JB wordmark — ported from Y2JBMark.dc.html
- * RGB split, clip-path glitch slices, logo-style slash letterforms.
+ * Y2JB wordmark — RGB split, glitch slices, slash letterforms.
  */
-export default function Y2JBLogo({ className = '' }) {
-  // Unique filter/ids per mount (multiple roots safe)
-  const uid = 'y2jb'
-  const glowId = `${uid}-glow`
-  const ltrId = `${uid}-ltr`
-  const sa = `${uid}-sa`
-  const sb = `${uid}-sb`
-  const sc = `${uid}-sc`
+export function Y2JBLogo({ className = "" }: { className?: string }) {
+  const uid = "y2jb";
+  const glowId = `${uid}-glow`;
+  const ltrId = `${uid}-ltr`;
+  const sa = `${uid}-sa`;
+  const sb = `${uid}-sb`;
+  const sc = `${uid}-sc`;
 
   return (
     <svg
@@ -85,5 +83,5 @@ export default function Y2JBLogo({ className = '' }) {
         </g>
       </g>
     </svg>
-  )
+  );
 }
